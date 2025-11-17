@@ -1,0 +1,64 @@
+<!-- Floating Top Bar -->
+<div class="killer-top-bar">
+  <div class="brand-box">
+    <img src="https://d13ir53smqqeyp.cloudfront.net/d11-static-pages/images/dream11LogoWhite.webp" class="brand-img">
+    <span class="pro-badge">PRO</span>
+  </div>
+
+  <!-- Username center -->
+  <span id="userName" class="user-name"></span>
+
+  <!-- Wallet right -->
+  <button id="walletBtn" class="wallet-btn">₹0</button>
+</div>
+
+<style>
+.killer-top-bar{
+  position: fixed;top: 14px;left: 50%;transform: translateX(-50%);
+  width: calc(100% - 32px);max-width: 760px;height: 62px;
+  background: linear-gradient(180deg, rgba(10,12,20,0.85), rgba(12,14,24,0.6));
+  border-radius: 16px;border: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px) saturate(120%);
+  display: flex;align-items: center;justify-content: space-between;
+  padding: 0 14px;box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+  z-index: 9999999;
+}
+.brand-box{display: flex;align-items:center;gap:8px;}
+.brand-img{width:115px;filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));}
+.pro-badge{background:linear-gradient(90deg,#ff006a,#ff7e00);padding:3px 10px;border-radius:8px;color:#fff;font-size:13px;font-weight:700;}
+.user-name{position:absolute;left:50%;transform:translateX(-50%);font-size:15px;font-weight:700;color:#fff;text-transform:capitalize;}
+.wallet-btn{
+  background:linear-gradient(90deg,rgba(0,255,209,0.22),rgba(122,95,255,0.22));
+  padding:8px 14px;border-radius:12px;font-size:14px;font-weight:700;
+  border:1px solid rgba(255,255,255,0.1);color:#fff;
+}
+</style>
+
+<script>
+(function() {
+  const walletBtn = document.getElementById("walletBtn");
+  const userName = document.getElementById("userName");
+
+  // Read hash: #username#balance
+  let hash = location.hash.replace("#", "");
+  if (hash.includes("#")) {
+    const parts = hash.split("#");
+    const u = parts[0] || "";
+    const b = parts[1] || "0";
+
+    if (u) localStorage.setItem("APP_USER", u);
+    if (b && !isNaN(b)) localStorage.setItem("APP_BALANCE", b);
+
+    // Remove hash from URL
+    history.replaceState(null, "", location.pathname + location.search);
+  }
+
+  // Load saved values
+  const savedUser = localStorage.getItem("APP_USER") || "Guest";
+  const savedBal = localStorage.getItem("APP_BALANCE") || "0";
+
+  userName.textContent = savedUser;
+  walletBtn.textContent = "₹" + savedBal;
+
+})();
+</script>
